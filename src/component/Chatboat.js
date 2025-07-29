@@ -8,32 +8,31 @@ export default function ChatBot() {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
 
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const userMessage = input;
+    setMessages([...messages, { text: userMessage, isUser: true }]);
+    setInput("");
+    setLoading(true); //  Show loading message
 
-const handleSend = async (e) => {
-  e.preventDefault();
-  const userMessage = input;
-  setMessages([...messages, { text: userMessage, isUser: true }]);
-  setInput("");
-  setLoading(true); //  Show loading message
+    try {
+      const res = await fetch("/api/route", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage }),
+      });
 
-  try {
-    const res = await fetch("/api/route", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userMessage }),
-    });
-
-    const data = await res.json();
-    setMessages((prev) => [...prev, { text: data.reply, isUser: false }]);
-  } catch (error) {
-    setMessages((prev) => [
-      ...prev,
-      { text: "Error generating response.", isUser: false },
-    ]);
-  } finally {
-    setLoading(false); //  Hide loading message
-  }
-};
+      const data = await res.json();
+      setMessages((prev) => [...prev, { text: data.reply, isUser: false }]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { text: "Error generating response.", isUser: false },
+      ]);
+    } finally {
+      setLoading(false); //  Hide loading message
+    }
+  };
 
   // const handleSend = async (e) => {
   //   e.preventDefault();
@@ -90,68 +89,62 @@ const handleSend = async (e) => {
       </div>
 
       {isOpen && (
-        
-     <div className="fixed top-8 rounded-lg bottom-6 right-16 w-[42%] bg-black/30 bg-opacity-50 z-50 flex items-center justify-center">
-  <div className="w-full h-full rounded-lg shadow-lg flex flex-col bg-[url('/asset/bg1.jpg')] bg-cover bg-center bg-no-repeat">
-    {/* Optional: Add a semi-transparent overlay for readability */}
-    {/* <div className="absolute inset-0 bg-black/30 rounded-lg"></div> */}
+  <div className="fixed top-4 bottom-4 right-2 md:right-16 md:top-8 md:bottom-6 w-[95%] md:w-[42%] bg-black/30 bg-opacity-50 z-50 flex items-center justify-center">
+    <div className="w-full h-full overflow-y-auto rounded-lg shadow-lg flex flex-col bg-[url('/asset/bg1.jpg')] bg-cover bg-center bg-no-repeat">
+            {/* Optional: Add a semi-transparent overlay for readability */}
+            {/* <div className="absolute inset-0 bg-black/30 rounded-lg"></div> */}
 
-    {/* Header */}
-    <div className="relative flex justify-between items-center bg-blue-300 text-white p-4 rounded-t-lg">
-      <h2 className="text-lg font-bold">💬 ATH Agent</h2>
-      <button onClick={() => setIsOpen(false)}>✖</button>
-    </div>
+            {/* Header */}
+            <div className="relative flex justify-between items-center bg-blue-300 text-white p-4 rounded-t-lg">
+              <h2 className="text-lg font-bold">💬 ATH Agent</h2>
+              <button onClick={() => setIsOpen(false)}>✖</button>
+            </div>
 
-    {/* Messages */}
-    <div className="relative flex-1 overflow-y-auto p-4 space-y-2">
-      {messages.map((msg, i) => (
-        <div
-          key={i}
-          className={`max-w-xs px-4 py-2 rounded-lg ${
-            msg.isUser
-              ? "bg-blue-100 self-end text-right ml-auto"
-              : "bg-gray-300 self-start text-left mr-auto"
-          }`}
-        >
-          {msg.text}
+            {/* Messages */}
+            <div className="relative flex-1 overflow-y-auto p-4 space-y-2">
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`max-w-xs px-4 py-2 rounded-lg ${
+                    msg.isUser
+                      ? "bg-blue-100 self-end text-right ml-auto"
+                      : "bg-gray-300 self-start text-left mr-auto"
+                  }`}
+                >
+                  {msg.text}
+                </div>
+              ))}
+
+              {loading && (
+                <div className="max-w-xs px-4 py-2 rounded-lg bg-yellow-100 text-gray-700 italic self-start mr-auto">
+                  Preparing response, wait for a moment...
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <form
+              onSubmit={handleSend}
+              className="relative flex items-center p-4 border-t bg-gray-100"
+            >
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type a message..."
+                className="flex-grow px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <button
+                type="submit"
+                className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                Send
+              </button>
+            </form>
+          </div>
         </div>
-      ))}
-
-
-   {loading && (
-    <div className="max-w-xs px-4 py-2 rounded-lg bg-yellow-100 text-gray-700 italic self-start mr-auto">
-      Preparing response, wait for a moment...
-    </div>
-  )}
-
-      <div ref={messagesEndRef} />
-    </div>
-
-    {/* Input */}
-    <form
-      onSubmit={handleSend}
-      className="relative flex items-center p-4 border-t bg-gray-100"
-    >
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Type a message..."
-        className="flex-grow px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      <button
-        type="submit"
-        className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-      >
-        Send
-      </button>
-    </form>
-  </div>
-</div>
-
-
-    
-        
       )}
     </>
   );
