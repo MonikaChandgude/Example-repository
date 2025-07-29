@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 
 const Header = ({ toggleSidebar, isSidebarOpen }) => {
@@ -22,11 +22,20 @@ const Header = ({ toggleSidebar, isSidebarOpen }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d={isSidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              d={
+                isSidebarOpen
+                  ? "M6 18L18 6M6 6l12 12"
+                  : "M4 6h16M4 12h16M4 18h16"
+              }
             ></path>
           </svg>
         </button>
-        <h1 className="text-xl font-semibold text-gray-800">AntixxTechHub</h1>
+        {/* <h1 className="text-xl font-semibold text-gray-800">AntixxTechHub</h1> */}
+        <img
+          src="/asset/company_logo.svg" // Update with your actual logo path
+          alt="Company Logo"
+          className="h-8 w-auto"
+        />
       </div>
       <div className="flex items-center gap-4">
         <input
@@ -40,7 +49,7 @@ const Header = ({ toggleSidebar, isSidebarOpen }) => {
             className="focus:outline-none"
           >
             <img
-              src="/asset/user_1.png" // 
+              src="/asset/user_1.png" //
               alt="Profile"
               className="w-10 h-10 rounded-full"
             />

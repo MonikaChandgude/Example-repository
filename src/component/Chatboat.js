@@ -98,7 +98,7 @@ const handleSend = async (e) => {
 
     {/* Header */}
     <div className="relative flex justify-between items-center bg-blue-300 text-white p-4 rounded-t-lg">
-      <h2 className="text-lg font-bold">💬 AntixxTachHub ChatBot</h2>
+      <h2 className="text-lg font-bold">💬 ATH <Agent></Agent></h2>
       <button onClick={() => setIsOpen(false)}>✖</button>
     </div>
 
