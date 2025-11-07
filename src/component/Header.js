@@ -7,7 +7,7 @@ const Header = ({ toggleSidebar, isSidebarOpen }) => {
   return (
     <header className="bg-white shadow p-4 flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
       <div className="flex items-center space-x-4 flex-wrap">
-        <button className="text-gray-800 hover:text-gray-600 focus:outline-none">
+        <button onClick={toggleSidebar} className="text-gray-800 hover:text-gray-600 focus:outline-none">
           <svg
             className="w-6 h-6"
             fill="none"
